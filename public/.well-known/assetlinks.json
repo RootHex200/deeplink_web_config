@@ -1,0 +1,9 @@
+[{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "klasio",
+      "package_name": "com.klasio.mobile",
+      "sha256_cert_fingerprints":
+      ["86:42:96:C6:3F:B3:1F:9C:86:3A:61:C8:9B:F6:B9:43:D6:40:48:79:38:FE:5D:A8:01:35:99:24:59:72:74:F1"]
+    }
+  }]

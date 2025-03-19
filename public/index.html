@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Redirecting...</title>
+  </head>
+  <body>
+    <script>
+      const PLAY_STORE_APP_ID = 'com.klasio.mobile';
+      const KLASIO_URL = `klasio://deeplink-8d480.web.app/details?domain=wedevsacademy&logo=https://cdn.klasio.dev/1000011/864/wedevs-academy-color-updated-300x101.png&name=Wedevs Academy Clone`;
+      const PLAY_STORE_URL = `market://details?id=${PLAY_STORE_APP_ID}`;
+      const PLAY_STORE_WEB_URL = `https://play.google.com/store/apps/details?id=${PLAY_STORE_APP_ID}`;
+      const PLAY_STORE_INTENT_URL = `intent://details?id=${PLAY_STORE_APP_ID}#Intent;scheme=market;package=com.android.vending;end;`;
+
+      // Function to get query parameters
+      function getQueryParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+          domain: params.get('domain'),
+          logo: params.get('logo'),
+          name: params.get('name'),
+          // Add any other parameters you need
+        };
+      }
+
+      // Function to construct login URL with parameters
+      function getLoginUrl() {
+        const params = getQueryParams();
+        const queryString = Object.entries(params)
+          .filter(([_, value]) => value) // Only include non-null values
+          .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+          .join('&');
+        
+        return `klasio://deeplink-8d480.web.app/login?${queryString}`;
+      }
+
+      // Check if user is on Android device
+      const isAndroid = /Android/i.test(navigator.userAgent);
+      
+      async function handleRedirect() {
+
+        const currentPath = window.location.pathname;
+
+        const isLoginPath = currentPath.includes('/login');
+        if (isLoginPath && isAndroid) {
+          try {
+
+            const loginUrl = getLoginUrl();
+            
+
+            window.location.href = loginUrl;
+            
+
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Try to open Play Store using intent URL for Android 13+
+            window.location.href = PLAY_STORE_INTENT_URL;
+
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            window.location.href = PLAY_STORE_URL;
+            
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            window.location.href = PLAY_STORE_WEB_URL;
+          } catch (error) {
+            window.location.href = PLAY_STORE_WEB_URL;
+          }
+        }
+      }
+
+      handleRedirect();
+    </script>
+  </body>
+</html>
+
